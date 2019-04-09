@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+<form method="post" enctype="multipart/form-data">
+    <input type="text" name="username"/>
+    <input type="password" name="password"/>
+    <input type="submit" value="login"/>
+</form>
+<p>Don't have an account?</p>
+<a href="{{ url_for('create_account') }}">Sign up</a>
+{% endblock %}
