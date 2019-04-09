@@ -16,6 +16,12 @@ def show_login():
     return render_template("login.html", **context)
 
 
+def valid_session():
+
+    # check if [cookie,user] combination is valid, return to login page otherwise
+    return True
+
+
 def valid_credentials(username, password):
 
     # check if legitimate [username,password] combination

@@ -4,8 +4,8 @@ import flask
 import collaborative_journaling as cj
 
 
-@cj.route('/')
-def show_timeline():
+@cj.route('/api/v1/entries/')
+def show_entries():
 
     # if 'user' not in flask.session:
     #     flask.abort(403)
@@ -20,5 +20,8 @@ def show_timeline():
     print(context)
 
     return flask.abort(404)
+
+
+    
 
 
