@@ -26,3 +26,11 @@ def valid_credentials(username, password):
 
     # check if legitimate [username,password] combination
     return True
+
+def verify_user():
+    if 'user' in session:
+        return
+    else if request.method == 'POST':
+        abort(403);
+    else:
+        return redirect(url_for('show_login'))

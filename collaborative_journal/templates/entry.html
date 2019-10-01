@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="journal_entry">
+
+	<form method="post">
+		<input type="text" name="title" value="{{ entry.title|default('') }}">
+		<input type="text" name="entry" value="{{ entry.body|default('') }}">
+		<input type="submit" name="save">
+	</form>
+
+</div>
+
+{% endblock %}

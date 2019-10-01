@@ -15,18 +15,18 @@ CREATE TABLE friends (
 	CONSTRAINT dif_friends CHECK (user1_id <> user2_id)
 );
 
-CREATE TRIGGER order_friends_pairs
-	BEFORE INSERT ON friends
-	FOR EACH ROW
-		DECLARE temp NUMBER;
-		BEGIN
-			IF :NEW.user1_id > :NEW.user2_id THEN
-				temp := :NEW.USER2_ID;
-				:NEW.user2_id := :NEW.user1_id;
-				:NEW.user1_id := temp;
-			END IF ;
-		END;
-/
+-- CREATE TRIGGER order_friends_pairs
+-- 	BEFORE INSERT ON friends
+-- 	FOR EACH ROW
+-- 		DECLARE temp NUMBER;
+-- 		BEGIN
+-- 			IF :NEW.user1_id > :NEW.user2_id THEN
+-- 				temp := :NEW.USER2_ID;
+-- 				:NEW.user2_id := :NEW.user1_id;
+-- 				:NEW.user1_id := temp;
+-- 			END IF ;
+-- 		END;
+-- /
 
 CREATE TABLE posts (
 	post_id NUMBER NOT NULL PRIMARY KEY,
@@ -38,6 +38,6 @@ CREATE TABLE posts (
 );
 
 CREATE TABLE post_access (
-	user_id NUMBER NOT NULL REFERENCES(users),
-	post_id NUMBER NOT NULL REFERENCES(posts)
+	user_id NUMBER NOT NULL REFERENCES users,
+	post_id NUMBER NOT NULL REFERENCES posts
 );
