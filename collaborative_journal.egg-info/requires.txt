@@ -1,0 +1,7 @@
+flask
+sh
+Flask-Testing
+selenium
+requests
+arrow
+nodeenv

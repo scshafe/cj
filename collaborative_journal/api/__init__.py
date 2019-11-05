@@ -1,4 +1,4 @@
 
 
-import collaborative_journaling.api.show_timeline
+from collaborative_journal.api.timeline import new_entry
 

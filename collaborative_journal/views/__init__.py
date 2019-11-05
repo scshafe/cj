@@ -1,5 +1,7 @@
-import collaborative_journal
 
-from collaborative_journaling.views.login import show_login
+
+from collaborative_journal.views.login import login, logout, register
+from collaborative_journal.views.entry import show_timeline
+
 
 

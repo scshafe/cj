@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block content}
+{% block content %}
 
 <div class="timeline">
 
@@ -8,14 +8,14 @@
 		<div class="title">
 			{{entry.title}}
 		</div>
+		
 		<div class="preview">
-			preview..
+			preview.
 		</div>
 
-		<a href="{{ url_for('edit_entry', entry.postid) }}">
+		<a href="{{ url_for('edit_entry', postid=entry.post_id) }}">
 			Edit
 		</a>
-
 	</div>
 	{% endfor %}
 

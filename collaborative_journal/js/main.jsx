@@ -1,11 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Entries from './entries';
+import MyEditor from './practice_editor';
 
 ReactDOM.render(
-
-  <Entries url="/api/v1/entries/" />,
-
+  <MyEditor url="/api/entry/" />,
   document.getElementById('reactEntry'),
+);
+
+
+ReactDOM.render(
+  <EntryList url="/api/entry/" />,
+  document.getElementById('reactEntryTimeline'),
 );
 

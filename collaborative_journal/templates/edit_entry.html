@@ -1,13 +1,38 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="journal_entry">
-
-	<form method="post">
+	{% if entry %}
+	<form method="post" id="save_entry">
 		<input type="text" name="title" value="{{ entry.title|default('') }}">
-		<input type="text" name="entry" value="{{ entry.body|default('') }}">
+		<!-- <input type="text" name="entry" value="{{ entry.body|default('') }}"> -->
 		<input type="submit" name="save">
 	</form>
+	<div class="entry_text">
+		<textarea name="journal_entry" form="save_entry" charset="utf-8">
+			{{ entry.journal_entry}}
+		</textarea>
+	</div>
+	{% else %}
+	<form method="post" id="save_entry">
+		<input type="text" name="title">
+		<!-- <input type="text" name="entry"> -->
+		<input type="submit" name="save">
+	</form>
+	<div class="entry_text">
+		<textarea name="journal_entry" form="save_entry" charset="utf-8">
+		</textarea>
+	</div>
+	{% endif %}
 
 </div>
 
 {% endblock %}
+
+
+<!-- 
+<form action="/action_page.php" id="usrform">
+  Name: <input type="text" name="usrname">
+  <input type="submit">
+</form>
+
+<textarea name="comment" form="usrform">Enter text here...</textarea> -->

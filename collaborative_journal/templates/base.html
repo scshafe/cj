@@ -6,9 +6,16 @@
     </head>
     <body>
         <header>
-            
+        {% if current_user.is_authenticated %}
+        <a href="{{ url_for('logout') }}">logout</a>
+        <a href="{{ url_for('new_entry') }}">New Entry</a>
+        <a href="{{ url_for('show_timeline') }}">Timeline</a>
+        {% else %} 
+        <a href="{{ url_for('login') }}">login</a>
+        {% endif %}
         </header>
         <hr>
         {% block content %}{% endblock %}
+        
     </body>
 </html>

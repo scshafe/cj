@@ -1,10 +1,32 @@
 {% extends "base.html" %}
 {% block content %}
-<form method="post" enctype="multipart/form-data">
-    <input type="text" name="username"/>
-    <input type="password" name="password"/>
-    <input type="submit" value="login"/>
-</form>
+
+<h1>Sign In</h1>
+    <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.username.label }}<br>
+            {{ form.username(size=32) }}
+        </p>
+        <p>
+            {{ form.password.label }}<br>
+            {{ form.password(size=32) }}
+        </p>
+        <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
+        <p>{{ form.submit() }}</p>
+    </form>
+
 <p>Don't have an account?</p>
-<a href="{{ url_for('create_account') }}">Sign up</a>
+<a href="{{ url_for('register') }}">Sign up</a>
 {% endblock %}
+
+
+
+
+
+    <!-- <form method="POST" action="/login">
+	<div>{{ form.csrf_token }}</div>
+    <div>{{ form.username.label }}: {{ form.username(class="css_class") }}</div>
+    <div>{{ form.password.label }}: {{ form.password() }}</div>
+    <p><input type=submit value=Login>
+</form> -->

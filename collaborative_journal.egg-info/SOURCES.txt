@@ -1,0 +1,9 @@
+setup.py
+collaborative_journal/__init__.py
+collaborative_journal/config.py
+collaborative_journal/queryStatements.py
+collaborative_journal.egg-info/PKG-INFO
+collaborative_journal.egg-info/SOURCES.txt
+collaborative_journal.egg-info/dependency_links.txt
+collaborative_journal.egg-info/requires.txt
+collaborative_journal.egg-info/top_level.txt
