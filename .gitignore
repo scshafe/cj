@@ -1,0 +1,14 @@
+migrations/
+webpack.config.js
+setup.py
+package.json
+package-lock.json
+var/*
+tests/*
+sql/*
+node_modules/*
+env/*
+*/egg-info
+static/*
+todo.txt
+*DS_Store*
