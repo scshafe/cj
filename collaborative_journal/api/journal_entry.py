@@ -13,8 +13,30 @@ import hashlib
 from tempfile import mkstemp
 import shutil
 import json
-from sqlalchemy import inspect
+from sqlalchemy import inspect, update
 
+
+debug_space='\n\n\n'
+
+
+# API:
+#  entry_id:
+#  editor_state:
+#  title:
+
+
+
+
+
+def getFile(full_filename):
+    return open(full_filename, 'r').read()
+
+
+def sha256sum(filename):
+    """Return sha256 hash of file content, similar to UNIX sha256sum."""
+    content = open(filename, 'rb').read()
+    sha256_obj = hashlib.sha256(content)
+    return sha256_obj.hexdigest()
 
 
 @cj.app.route('/api/entry/new/', methods=['GET'])
@@ -49,18 +71,35 @@ def new_entry():
 def save_journal_entry(entry_id):
 
     save_data = json.loads(request.data.decode('utf8'))
-    print(save_data)
+    print('\n')
+    print(save_data, end=debug_space)
 
-    post = Post.query.get(entry_id)
+    # sesh = db.Session()
+
+    # sesh.execute(Post.update().where(Post.c.id==entry_id).values(title=save_data['entry_title']))
+    p = Post.query.get(entry_id)
+    p.title = save_data['title']
+    p.save_post(save_data['editor_state'])
+
+    db.session.commit()
 
 
-    tempfile = open(post.get_full_filename(), 'w')
-    tempfile.write(json.dumps(save_data['entry']))
-    tempfile.flush()
+    # p = Post.query.get(entry_id)
+
+    # p.save_post(save_data['entry'])
+    # if save_data['entry_title']:
+        # p.title= save_data['entry_title']
+    # tempfile = open(post.get_full_filename(), 'w')
+    # tempfile.write(json.dumps(save_data['entry']))
+    # tempfile.flush()
+    # db.session.
 
     context = {}
     context['successful_save'] = True
     return jsonify(**context)
+
+
+
 
 
 
@@ -76,11 +115,14 @@ def get_journal_entry(entry_id):
     post = Post.query.get(entry_id)
     context = {}
     print(post)
+    context = object_as_dict(post)
 
-    return jsonify(**object_as_dict(post))
+    if post.has_file():
+        context['editor_state'] = getFile(post.get_full_filename())
 
-
+    print(context)
     return jsonify(**context)
+
 
 
 @cj.app.route('/api/entry/<int:entry_id>/', methods=['DELETE'])

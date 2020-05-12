@@ -8,20 +8,14 @@ class JournalEntry extends React.Component {
   constructor(props) {
     super(props);
 
-    if (this.props.location.state.new_entry) {
-      // new entry (will come with entry_id)
-    }
-    else {
-      // editting existing entry
-    }
+    // this.state = {entry_id: this.pr}
 
 
     this.state = {entry_id: this.props.location.state.entry_id,
-                  editorState: EditorState.createEmpty(),
-                  entry_title: 'what',
+                  editor_state: EditorState.createEmpty(),
+                  title: '',
                   url: ''};
     console.log(this.state);
-    console.log(this.state.entry_id.entry_id);
     this.saveEntry = this.saveEntry.bind(this);
     this.onEntryChange = this.onEntryChange.bind(this);
     this.onTitleChange = this.onTitleChange.bind(this);
@@ -34,21 +28,24 @@ class JournalEntry extends React.Component {
         return response.json();
       })
     .then((data) => {
+      console.log(data.editor_state);
+      console.log(JSON.parse(data.editor_state));
+      console.log(convertFromRaw(JSON.parse(data.editor_state)));
       this.setState({
-        editorState: convertFromRaw(JSON.parse(data.entry_content)),
-        entry_title: data.entry_title,
+        editor_state: EditorState.createWithContent(convertFromRaw(JSON.parse(data.editor_state))),
+        title: data.title,
         url: data.url
       });
     })
     .catch(error => console.log(error));
   }
 
-  onEntryChange (editorState) {
-    this.setState({editorState: editorState});
+  onEntryChange (editor_state) {
+    this.setState({editor_state: editor_state});
   }
 
   onTitleChange (event) {
-    this.setState({entry_title: event.target.value});
+    this.setState({title: event.target.value});
   }
 
   saveEntry () {
@@ -59,8 +56,8 @@ class JournalEntry extends React.Component {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ entry_title: this.state.entry_title,
-                             entry: convertToRaw(this.state.editorState.getCurrentContent()),
+      body: JSON.stringify({ title: this.state.title,
+                             editor_state: convertToRaw(this.state.editor_state.getCurrentContent()),
                              })
     };
     fetch(`/api/entry/${this.state.entry_id}/`, fetchData)
@@ -80,16 +77,16 @@ class JournalEntry extends React.Component {
     return (
       <div>
         <div class="title">
-          <textarea value={this.state.entry_title} onChange={(event) => this.onTitleChange(event)} /> 
+          <textarea value={this.state.title} onChange={(event) => this.onTitleChange(event)} /> 
+          {this.state.title}
         </div>
         <div>
-          <Editor editorState={this.state.editorState} onChange={this.onEntryChange} />
+          <Editor editorState={this.state.editor_state} onChange={this.onEntryChange} />
         </div>
         <div>
           <button id="saveButton" onClick={this.saveEntry}>
             Save
           </button>
-          {this.state.entry_title}
         </div>
       </div>
     );

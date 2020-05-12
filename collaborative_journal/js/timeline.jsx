@@ -52,14 +52,14 @@ class Timeline extends React.Component {
 			<div>
 				<div className="timeline_container">
 					{this.state.entry_ids.map(je => (
-						<li key={je} >
+						<div key={je} >
 							<Preview api={`api/preview/${je}/`} entry_id={je} />
 
 
 							<button onClick={this.handleDelete.bind(this, je)} >
 								delete
 							</button>
-						</li>
+						</div>
 						))}
 				</div>
 

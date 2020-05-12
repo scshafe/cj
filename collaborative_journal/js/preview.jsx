@@ -38,14 +38,14 @@ class Preview extends React.Component {
 			<div>
 				<div className="entry_preview">
 					<div>
-						{this.state.entry_id}
+						{this.props.entry_id}
 					</div>
 					<div>
 						{this.state.title}
 					</div>
 					<div>
 						<Link to={{
-							pathname: "/journal_entry/:entry_id",
+							pathname: `/journal_entry/${this.props.entry_id}`,
 							state: {
 								entry_id: this.props.entry_id
 							}

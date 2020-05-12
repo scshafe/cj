@@ -4,6 +4,16 @@ from collaborative_journal.model import db
 from collaborative_journal.config import UPLOAD_FOLDER
 from werkzeug import secure_filename
 import os
+from tempfile import mkstemp
+import shutil
+import json
+
+
+def sha256sum(filename):
+    """Return sha256 hash of file content, similar to UNIX sha256sum."""
+    content = open(filename, 'rb').read()
+    sha256_obj = hashlib.sha256(content)
+    return sha256_obj.hexdigest()
 
 
 class Post(db.Model):
@@ -33,17 +43,22 @@ class Post(db.Model):
 
     def save_post(self, entry_data):
         if not self.entry_filename:
+            print(self.entry_filename)
             dummy, temp_filename = mkstemp()
             tempfile = open(temp_filename, 'w')
-            tempfile.write(entry_data)
+            tempfile.write(json.dumps(entry_data))
             tempfile.flush()
             self.create_filename(sha256sum(temp_filename))
             shutil.move(temp_filename, self.get_full_filename())
 
         else:
+            print("saving (not first one)")
             file = open(self.get_full_filename(), 'w')
-            file.write(entry_data)
+            file.write(json.dumps(entry_data))
             file.flush()
+
+    def has_file(self):
+        return self.entry_filename != None
             
 
 

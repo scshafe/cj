@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import JournalEntry from './journal_entry';
 // import App from './app';
 // import { useHistory } from "react-router-dom";
@@ -9,6 +9,9 @@ import JournalEntry from './journal_entry';
 class NavBar extends React.Component {
 	constructor(props) {
 		super(props);
+
+		this.state = {redirect: null,
+					  entry_id: null}
 
 		this.handleNewEntry = this.handleNewEntry.bind(this);
 	}
@@ -30,19 +33,23 @@ class NavBar extends React.Component {
 		 })
 		 .then((data) => {
 		 	console.log(data.entry_id);
-		 	// let history = useHistory();
-		 	// this.props.history.push(`/journal_entry/${data.entry_id}`);
-		 	// this.context.history.push(`/journal_entry/${data.entry_id}`);
-		 	// make sure redirect to new entry occurs
-
+		 	this.setState({redirect: true, entry_id: data.entry_id});
 		 })
 		 .catch(error => console.log(error));
 	}
 
 	render() {
+		if (this.state.redirect) {
+			return <Redirect to={{
+				pathname: `/journal_entry/${this.state.entry_id}`,
+				state: { entry_id: this.state.entry_id}
+			}}/>;
+		}
 		return (
 			<div>
-				<button id="newentry" type="button" onClick={this.handleNewEntry}>New Entry</button>
+				<button id="newentry" type="button" onClick={this.handleNewEntry}>
+					new entry
+				</button>
 			</div>
 			);
 	}
