@@ -31,3 +31,23 @@ class Post(db.Model):
         print(self.get_relative_filename())
         return os.path.join(UPLOAD_FOLDER, self.get_relative_filename())
 
+    def save_post(self, entry_data):
+        if not self.entry_filename:
+            dummy, temp_filename = mkstemp()
+            tempfile = open(temp_filename, 'w')
+            tempfile.write(entry_data)
+            tempfile.flush()
+            self.create_filename(sha256sum(temp_filename))
+            shutil.move(temp_filename, self.get_full_filename())
+
+        else:
+            file = open(self.get_full_filename(), 'w')
+            file.write(entry_data)
+            file.flush()
+            
+
+
+
+
+
+

@@ -25,44 +25,44 @@ def sha256sum(filename):
     return sha256_obj.hexdigest()
 
 
-@cj.app.route('/api/entry/new/', methods=['GET', 'POST'])
-def new_entry():
-    if request.method == 'GET':
-        context = {}
-        context['entry_title'] = 'testcomponentdidmount'
-        context['url'] = '/api/entry/'
-        print("checkpoint")
-        return jsonify(**context), 201
+# @cj.app.route('/api/entry/new/', methods=['GET', 'POST'])
+# def new_entry():
+#     if request.method == 'GET':
+#         context = {}
+#         context['entry_title'] = 'testcomponentdidmount'
+#         context['url'] = '/api/entry/'
+#         print("checkpoint")
+#         return jsonify(**context), 201
 
-    et = json.loads(request.data.decode('utf8'))
-    print(et)
-    p = Post(title=et['entry_title'], user_id=current_user.get_id())
+#     et = json.loads(request.data.decode('utf8'))
+#     print(et)
+#     p = Post(title=et['entry_title'], user_id=current_user.get_id())
 
-    dummy, temp_filename = mkstemp()
-    tempfile = open(temp_filename, 'w')
-    tempfile.write(json.dumps(et['entry']))
-    tempfile.flush()
-    p.create_filename(sha256sum(temp_filename))   
-    shutil.move(temp_filename, p.get_full_filename())
+#     dummy, temp_filename = mkstemp()
+#     tempfile = open(temp_filename, 'w')
+#     tempfile.write(json.dumps(et['entry']))
+#     tempfile.flush()
+#     p.create_filename(sha256sum(temp_filename))   
+#     shutil.move(temp_filename, p.get_full_filename())
 
-    db.session.add(p)
-    db.session.commit()
-    context = {}
-    context['successful_save'] = True
-    return jsonify(**context)
+#     db.session.add(p)
+#     db.session.commit()
+#     context = {}
+#     context['successful_save'] = True
+#     return jsonify(**context)
 
     # return redirect(url_for('show_timeline'))
     # return flask.jsonify(**context), 200
 
-@cj.app.route('/api/entry/<int:entry_id>/', methods=['GET', 'POST', 'DELETE'])
-def entry():
-    if request.method == 'GET':
-        p = Post.query.get(entry_id)
+# @cj.app.route('/api/entry/<int:entry_id>/', methods=['GET', 'POST', 'DELETE'])
+# def entry():
+#     if request.method == 'GET':
+#         p = Post.query.get(entry_id)
 
-        context['entry_title': p.title, 'entry_content': getFile(p.get_full_filename())]
-        return jsonify(**context)
-    print("post method not yet implemented")
-    return jsonify(**{})
+#         context['entry_title': p.title, 'entry_content': getFile(p.get_full_filename())]
+#         return jsonify(**context)
+#     print("post method not yet implemented")
+#     return jsonify(**{})
 
 
 @cj.app.route('/api/entry/<int:entry_id>/edit/', methods=['GET', 'POST', 'DELETE'])
@@ -70,38 +70,53 @@ def edit_entry():
     if request.method == 'GET':
         p = Post.query.get(entry_id)
         context['entry_title': p.title, 'entry_content': getFile(p.get_full_filename())]
+        return jsonify(**context)
         return render_template('practice.html', **context)
 
-# @cj.app.route('/api/v1/entries/')
-# def show_entries():
-
-#     # logname = flask.session('user')
-#     # if 'user' not in flask.session:
-#     #     flask.abort(403)
-#     context = {}
-#     context["next"] = ""
-#     context["url"] = flask.request.path
-#     page = request.args.get('page', default=0, type=int)
-#     size = request.args.get('size', default=10, type=int)
-
-#     results = cj.queryStatements.getQuery("getPosts", user_id)
-
-#     context["posts"] = []
-#     for result in results:
-#         url = flask.request.path + result["postid"]
-#         context["posts"].append({"postid": result["postid"], "url": url})
-#     print(context)
-
-#     return flask.jsonify(**context), 201
-
-#     return flask.abort(404)
 
 
 
 
 
 
-# @cj.route('/api/v1/entries/')
+
+
+
+
+
+@cj.app.route('/api/preview/<int:entry_id>/', methods=['GET'])
+def get_preview(entry_id):
+
+    # posts = Post.query.filter_by(id=entry_id)
+    post = Post.query.get(entry_id)
+    context = {}
+
+    context['title'] = post.title
+    return jsonify(**context)
+
+    return None
+
+
+
+
+@cj.app.route('/api/timeline/', methods=['GET'])
+def get_timeline():
+    if not current_user.is_authenticated:
+        return redirect(url_for('login'))
+
+    user = load_user(current_user.get_id())
+    print('\n\n')
+    print(user)
+    print('\n\n')
+    posts = Post.query.filter_by(user_id=user.id)
+    print(posts)
+    context = {}
+    context['entry_ids'] = []
+    for p in posts:
+        context['entry_ids'].append(p.id)
+    print(context)
+    return jsonify(**context)
+
 
 
     

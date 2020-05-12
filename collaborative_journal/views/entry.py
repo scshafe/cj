@@ -104,19 +104,21 @@ def show_timeline():
     if not current_user.is_authenticated:
         return redirect(url_for('login'))
 
-    user = load_user(current_user.get_id())
-    print('\n\n')
-    print(user)
-    print('\n\n')
-    posts = Post.query.filter_by(user_id=user.id)
-    print(posts)
+    # user = load_user(current_user.get_id())
+    # print('\n\n')
+    # print(user)
+    # print('\n\n')
+    # posts = Post.query.filter_by(user_id=user.id)
+    # print(posts)
     context = {}
-    context['entries'] = []
-    for p in posts:
-        context['entries'].append({'title': p.title, 'post_id': p.id})
+    # context['entry_ids'] = []
+    # for p in posts:
+    #     context['entry_ids'].append(p.id)
+        # context['entry_ids'].append({'title': p.title, 'post_id': p.id})
         # context['entries'].append({'title': p.title, 'post_id': p.id, 'journal_entry': p.get_full_filename()})
 
-    return render_template('index.html', **context)
+    # print(context)
+    return render_template('index_dynamic.html', **context)
     # return flask.jsonify(**context), 200
 
 

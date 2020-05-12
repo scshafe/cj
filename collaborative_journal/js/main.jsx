@@ -1,15 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import MyEditor from './practice_editor';
+// import { BrowserRouter } from 'react-router-dom';
+import CJ_app from './cj_app';
+// import ErrorBoundary from './ErrorBoundary';
+// import Timeline from './timeline';
+// import JournalEntry from './journal_entry';
+
 
 ReactDOM.render(
-  <MyEditor url="/api/entry/" />,
-  document.getElementById('reactEntry'),
+
+	<CJ_app />
+
+
+
+    ,
+   document.getElementById('reactEntry'),
 );
-
-
-ReactDOM.render(
-  <EntryList url="/api/entry/" />,
-  document.getElementById('reactEntryTimeline'),
-);
-
