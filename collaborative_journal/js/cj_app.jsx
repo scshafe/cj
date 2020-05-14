@@ -20,8 +20,9 @@ class CJ_app extends Component {
 
         <div>
           <Switch>
-            <Route exact path="/" component={Timeline}/>
-            <Route name="edit_entry" path="/journal_entry/:entry_id" component={JournalEntry} />
+            
+              <Route exact path="/" component={Timeline}/>
+              <Route path="/journal_entry/:entry_id" component={JournalEntry} />
           </Switch>
         </div>
 

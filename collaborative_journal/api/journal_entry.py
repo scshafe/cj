@@ -50,20 +50,10 @@ def new_entry():
     print(p)
     print(p.id)
     
-    # p = Post(title=et['entry_title'], user_id=current_user.get_id())
-
-    # dummy, temp_filename = mkstemp()
-    # tempfile = open(temp_filename, 'w')
-    # # tempfile.write(json.dumps(et['entry']))
-    # tempfile.flush()
-    # p.create_filename(sha256sum(temp_filename))   
-    # shutil.move(temp_filename, p.get_full_filename())
-
-    # db.session.add(p)
-    # db.session.commit()
     context = {}
     context['successful_save'] = True
-    context['entry_id'] = p.id
+    context['id'] = p.id
+    context['title'] = ''
     return jsonify(**context)
 
 
@@ -74,31 +64,15 @@ def save_journal_entry(entry_id):
     print('\n')
     print(save_data, end=debug_space)
 
-    # sesh = db.Session()
 
     # sesh.execute(Post.update().where(Post.c.id==entry_id).values(title=save_data['entry_title']))
     p = Post.query.get(entry_id)
     p.title = save_data['title']
     p.save_post(save_data['editor_state'])
-
     db.session.commit()
-
-
-    # p = Post.query.get(entry_id)
-
-    # p.save_post(save_data['entry'])
-    # if save_data['entry_title']:
-        # p.title= save_data['entry_title']
-    # tempfile = open(post.get_full_filename(), 'w')
-    # tempfile.write(json.dumps(save_data['entry']))
-    # tempfile.flush()
-    # db.session.
-
     context = {}
     context['successful_save'] = True
     return jsonify(**context)
-
-
 
 
 
@@ -115,7 +89,7 @@ def get_journal_entry(entry_id):
     post = Post.query.get(entry_id)
     context = {}
     print(post)
-    context = object_as_dict(post)
+    context = {'id': post.id, 'title': post.title}
 
     if post.has_file():
         context['editor_state'] = getFile(post.get_full_filename())

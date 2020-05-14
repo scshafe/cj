@@ -47,7 +47,9 @@ class Preview extends React.Component {
 						<Link to={{
 							pathname: `/journal_entry/${this.props.entry_id}`,
 							state: {
-								entry_id: this.props.entry_id
+								is_new_entry: false,
+								entry_id: this.props.entry_id,
+								title: this.state.title
 							}
 						}}>View
 						</Link>

@@ -9,35 +9,53 @@ class JournalEntry extends React.Component {
     super(props);
 
     // this.state = {entry_id: this.pr}
+    if (this.props.location.state.is_new_entry) {
+      console.log("new entry");
+      this.state = {editor_state: EditorState.createEmpty(),
+                    title: ''
+                    };
+    }
+    else {
 
-
-    this.state = {entry_id: this.props.location.state.entry_id,
-                  editor_state: EditorState.createEmpty(),
-                  title: '',
-                  url: ''};
-    console.log(this.state);
+      this.state = {entry_id: this.props.location.state.entry_id,
+                    editor_state: EditorState.createEmpty(),
+                    title: this.props.location.state.title,
+                    url: ''};
+      console.log(this.state);
+      
+    }
     this.saveEntry = this.saveEntry.bind(this);
     this.onEntryChange = this.onEntryChange.bind(this);
     this.onTitleChange = this.onTitleChange.bind(this);
-
   }
 
   componentDidMount() {
-    fetch(`/api/entry/${this.state.entry_id}`, {'credentials': 'same-origin'})
+    if (this.props.location.state.is_new_entry)
+    console.log(this.props.location.state);
+    const api_url = this.props.location.state.is_new_entry ? '/api/entry/new/' : `/api/entry/${this.state.entry_id}`;
+    fetch(api_url, {'credentials': 'same-origin'})
     .then((response) => {
         return response.json();
       })
     .then((data) => {
-      console.log(data.editor_state);
-      console.log(JSON.parse(data.editor_state));
-      console.log(convertFromRaw(JSON.parse(data.editor_state)));
-      this.setState({
-        editor_state: EditorState.createWithContent(convertFromRaw(JSON.parse(data.editor_state))),
-        title: data.title,
-        url: data.url
-      });
+      console.log(data);
+      if (this.props.location.state.is_new_entry) {
+        console.log(data);
+        this.setState({
+          title: '',
+          entry_id: data.id
+        });
+      }
+      else {
+        this.setState({
+          editor_state: EditorState.createWithContent(convertFromRaw(JSON.parse(data.editor_state))),
+          title: data.title,
+          url: data.url
+        });
+      }
     })
     .catch(error => console.log(error));
+    console.log(this.state);
   }
 
   onEntryChange (editor_state) {

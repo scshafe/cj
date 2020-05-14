@@ -39,17 +39,31 @@ class NavBar extends React.Component {
 	}
 
 	render() {
-		if (this.state.redirect) {
-			return <Redirect to={{
-				pathname: `/journal_entry/${this.state.entry_id}`,
-				state: { entry_id: this.state.entry_id}
-			}}/>;
-		}
+		// if (this.state.redirect) {
+		// 	return <Redirect to={{
+		// 		pathname: `/journal_entry/${this.state.entry_id}`,
+		// 		state: { entry_id: this.state.entry_id}
+		// 	}}/>;
+		// }
 		return (
 			<div>
-				<button id="newentry" type="button" onClick={this.handleNewEntry}>
-					new entry
-				</button>
+				<Link to={{
+					pathname: "/journal_entry/:entry_id",
+					state: {
+						is_new_entry: true
+					}
+				}}>
+					<button>
+						New Entry
+					</button>
+				</Link>
+
+				
+				<Link to={{ pathname: '/'}} >
+					<button>
+						Timeline
+					</button>
+				</Link>
 			</div>
 			);
 	}
