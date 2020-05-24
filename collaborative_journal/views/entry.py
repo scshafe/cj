@@ -6,11 +6,14 @@ from flask_login import current_user
 from collaborative_journal import load_user
 from collaborative_journal.model.post import Post
 from collaborative_journal.model import db
-from collaborative_journal.views.login import logout
+# from collaborative_journal.views.login import logout
 import os
 import hashlib
 from tempfile import mkstemp
 import shutil
+from django.views.decorators.csrf import ensure_csrf_cookie
+
+
 
 def getFile(full_filename):
     return open(full_filename, 'r').read()
@@ -98,7 +101,7 @@ def sha256sum(filename):
 
 
 
-
+# @ensure_csrf_cookie
 @cj.app.route('/', methods=['GET'])
 def show_timeline():
     if not current_user.is_authenticated:

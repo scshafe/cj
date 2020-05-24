@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import Preview from './preview'
 // import Entries from './entries';
+import {AuthConsumer} from './context';
 
 class Timeline extends React.Component {
 	constructor(props) {
@@ -29,7 +30,10 @@ class Timeline extends React.Component {
 
 	handleDelete(je, e) {
 		fetch(`/api/entry/${je}/`, {credentials: 'same-origin',
-								 method: 'DELETE'})
+								 method: 'DELETE',
+								 headers: {
+								 	"X-CSRFToken": e.target.attributes.token.value
+								 }})
 		  .then((response) => {
 		  	if (!response.ok) throw Error(response.statusText);
 		  	return response.json();
@@ -49,6 +53,8 @@ class Timeline extends React.Component {
 
 	render() {
 		return (
+			<AuthConsumer>
+			{({context_csrf_token}) => (
 			<div>
 				<div className="timeline_container">
 					{this.state.entry_ids.map(je => (
@@ -56,7 +62,7 @@ class Timeline extends React.Component {
 							<Preview api={`api/preview/${je}/`} entry_id={je} />
 
 
-							<button onClick={this.handleDelete.bind(this, je)} >
+							<button onClick={this.handleDelete.bind(this, je)} token={context_csrf_token} >
 								delete
 							</button>
 						</div>
@@ -64,6 +70,8 @@ class Timeline extends React.Component {
 				</div>
 
 			</div>
+			)}
+			</AuthConsumer>
 			);
 	}
 }

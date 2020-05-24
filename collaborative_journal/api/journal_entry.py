@@ -7,13 +7,14 @@ from flask_login import current_user
 from collaborative_journal import load_user
 from collaborative_journal.model.post import Post
 from collaborative_journal.model import db
-from collaborative_journal.views.login import logout
+# from collaborative_journal.views.login import logout
 import os
 import hashlib
 from tempfile import mkstemp
 import shutil
 import json
 from sqlalchemy import inspect, update
+# from flask_wtf import csrf
 
 
 debug_space='\n\n\n'
@@ -54,6 +55,9 @@ def new_entry():
     context['successful_save'] = True
     context['id'] = p.id
     context['title'] = ''
+    # context['token'] = csrf.generate_csrf()
+
+
     return jsonify(**context)
 
 
@@ -94,6 +98,7 @@ def get_journal_entry(entry_id):
     if post.has_file():
         context['editor_state'] = getFile(post.get_full_filename())
 
+    # context['token'] = csrf.generate_csrf()
     print(context)
     return jsonify(**context)
 
@@ -105,6 +110,7 @@ def delete_journal_entry(entry_id):
     print("deleting journal entry {}\n".format(entry_id))
 
     post = Post.query.get(entry_id)
+    post.delete_file()        
     db.session.delete(post)
     db.session.flush()
     db.session.commit()

@@ -9,6 +9,9 @@ APPLICATION_ROOT = '/'
 SECRET_KEY = b'D\x1f4\xf4\xa2\x849"\xde 0\xe7\x03?\xd8(b\xdb\x13\xa1\xdc0\x80\x0e'  # noqa: E501  pylint: disable=line-too-long
 SESSION_COOKIE_NAME = 'login'
 
+SERVER_NAME='localhost:8000'
+
+
 # File Upload to var/uploads/
 UPLOAD_FOLDER = os.path.join(
     os.path.dirname(os.path.dirname(os.path.realpath(__file__))),
@@ -22,6 +25,9 @@ ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 #     os.path.dirname(os.path.dirname(os.path.realpath(__file__))),
 #     'var', 'collaborative_journal.sqlite3'
 # )
+
+
+
 
 # "sqlite:////var/collaborative_journal.sqlite3"
 basedir = os.path.abspath(os.path.dirname(__file__))

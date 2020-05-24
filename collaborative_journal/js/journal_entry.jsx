@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import {Editor, EditorState, convertFromRaw, convertToRaw} from 'draft-js';
+import {AuthConsumer} from './context';
 // import 'draft-js/dist/Draft.css';
 
 class JournalEntry extends React.Component {
@@ -22,7 +23,6 @@ class JournalEntry extends React.Component {
                     title: this.props.location.state.title,
                     url: ''};
       console.log(this.state);
-      
     }
     this.saveEntry = this.saveEntry.bind(this);
     this.onEntryChange = this.onEntryChange.bind(this);
@@ -43,14 +43,16 @@ class JournalEntry extends React.Component {
         console.log(data);
         this.setState({
           title: '',
-          entry_id: data.id
+          entry_id: data.id,
+
         });
       }
       else {
         this.setState({
           editor_state: EditorState.createWithContent(convertFromRaw(JSON.parse(data.editor_state))),
           title: data.title,
-          url: data.url
+          url: data.url,
+
         });
       }
     })
@@ -66,13 +68,22 @@ class JournalEntry extends React.Component {
     this.setState({title: event.target.value});
   }
 
-  saveEntry () {
+  saveEntry (event) {
+    event.preventDefault();
+    if (this.state.cookie == ''){
+      alert("cookie is not set");
+      return;
+    }
+    console.log(event.target);
+    // console.log(event.target.token);
+    // console.log(event.target.elements);
+    // console.log(event.target.attributes.token.value);
     const fetchData = {
       credentials: 'same-origin',
       method: 'POST',
       headers: {
-        Accept: 'application/json',
         'Content-Type': 'application/json',
+        "X-CSRFToken": event.target.attributes.token.value
       },
       body: JSON.stringify({ title: this.state.title,
                              editor_state: convertToRaw(this.state.editor_state.getCurrentContent()),
@@ -93,6 +104,8 @@ class JournalEntry extends React.Component {
 
   render() {
     return (
+      <AuthConsumer>
+      {({context_csrf_token}) => (
       <div>
         <div class="title">
           <textarea value={this.state.title} onChange={(event) => this.onTitleChange(event)} /> 
@@ -102,11 +115,13 @@ class JournalEntry extends React.Component {
           <Editor editorState={this.state.editor_state} onChange={this.onEntryChange} />
         </div>
         <div>
-          <button id="saveButton" onClick={this.saveEntry}>
+          <button id="saveButton" onClick={this.saveEntry} token={context_csrf_token} >
             Save
           </button>
         </div>
       </div>
+      )}
+      </AuthConsumer>
     );
   }
 }

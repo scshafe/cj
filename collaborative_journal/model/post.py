@@ -59,6 +59,12 @@ class Post(db.Model):
 
     def has_file(self):
         return self.entry_filename != None
+
+    def delete_file(self):
+        if self.entry_filename:
+            tmp_full_filename = self.get_full_filename()
+            os.remove(tmp_full_filename)
+        
             
 
 
