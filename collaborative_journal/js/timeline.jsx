@@ -11,7 +11,7 @@ class Timeline extends React.Component {
 
 		this.state = {entry_ids: []};
 
-		// this.handleDelete = this.handleDelete.bind(this);
+		this.handleDelete = this.handleDelete.bind(this);
 	}
 
 	componentDidMount() {
@@ -29,6 +29,9 @@ class Timeline extends React.Component {
 	}
 
 	handleDelete(je, e) {
+		console.log(e);
+		console.log(e.target);
+		console.log(e.target.attributes);
 		fetch(`/api/entry/${je}/`, {credentials: 'same-origin',
 								 method: 'DELETE',
 								 headers: {
@@ -74,9 +77,12 @@ class Timeline extends React.Component {
 			</AuthConsumer>
 			);
 	}
+	
 }
 
 
 
 
 export default Timeline;
+
+

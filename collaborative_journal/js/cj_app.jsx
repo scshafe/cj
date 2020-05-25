@@ -20,7 +20,7 @@ function CJ_app(props) {
   // render() {
     return (
       <BrowserRouter>
-      <AuthProvider>
+      <AuthProvider token={props.token}>
       <div>
         <div>
           <NavBar />

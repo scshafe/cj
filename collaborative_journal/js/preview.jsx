@@ -8,13 +8,10 @@ import JournalEntry from './journal_entry';
 class Preview extends React.Component {
 	constructor(props) {
 		super(props);
-
 		console.log(this.props);
 		this.state = {
 			title: ''
-		};
-
-		
+		};	
 	}
 
 	componentDidMount() {
@@ -30,8 +27,6 @@ class Preview extends React.Component {
 		  })
 		  .catch(error => console.log(error));
 	}
-
-
 
 	render() {
 		return (

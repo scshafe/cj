@@ -13,33 +13,10 @@ class LoginScreen extends Component {
 		this.handlePassword = this.handlePassword.bind(this);
 		this.state={username: '',
 					password: ''
-					// ,cookie: ''
-					// ,cookie: Cookies.get('csrftoken')
+					,cookie: ''
 				};
-		// console.log(this.state.cookie);
 	}
-
-	// componentDidMount() {
-		// const fetchData = {
-		// 	credentials: 'same-origin',
-  //     		method: 'GET',
-  //     		headers: {
-  //       		Accept: 'application/json',
-  //       		'Content-Type': 'application/json',
-  //     },
-		// }
-
-		// fetch('/token', {'credentials': 'same-origin'})
-		// .then((response) => {
-		// 	return response.json();
-		// })
-		// .then((data) => {
-		// 	console.log(data);
-		// 	this.setState({cookie: data.token});
-		// 	console.log(this.state);
-		// })
-		// console.log(this.state);
-	// }
+	
 
 	handleUsername(event) {
 		this.setState({username: event.target.value});
@@ -53,12 +30,13 @@ class LoginScreen extends Component {
 	render() {
 		return(
 			<AuthConsumer>
-			{({isAuth, login, logout, cookie_ready}) => (
+			{({isAuth, login, logout}) => (
 
 				isAuth ? <Redirect to={{pathname:'/'}} /> :
 			<div>
 				<h1>Sign In</h1>
 				<form onSubmit={login} id="LoginForm" noValidate>
+					<input type="hidden" name="csrf_token" value={this.state.cookie} />
 					<label>
 						Username
 						<input type="text" required size="32" id="username" value={this.state.username} onChange={this.handleUsername} />
@@ -71,11 +49,10 @@ class LoginScreen extends Component {
 						Remember Me
 						<input type="checkbox" id="remember_me" name="remember_me"  />
 					</label>
-					{ !cookie_ready ? <div>Waiting for authentication</div> :
 					<label>
 						Login In.
 						<input id="submit" name="submit" type="submit" value="Sign In" />
-					</label>}
+					</label>
 				</form>
 
 				<div>

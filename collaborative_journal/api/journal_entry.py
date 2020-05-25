@@ -14,7 +14,6 @@ from tempfile import mkstemp
 import shutil
 import json
 from sqlalchemy import inspect, update
-# from flask_wtf import csrf
 
 
 debug_space='\n\n\n'
@@ -55,7 +54,6 @@ def new_entry():
     context['successful_save'] = True
     context['id'] = p.id
     context['title'] = ''
-    # context['token'] = csrf.generate_csrf()
 
 
     return jsonify(**context)
@@ -80,7 +78,6 @@ def save_journal_entry(entry_id):
 
 
 
-
 def object_as_dict(obj):
     return {c.key: getattr(obj, c.key)
             for c in inspect(obj).mapper.column_attrs}
@@ -98,7 +95,6 @@ def get_journal_entry(entry_id):
     if post.has_file():
         context['editor_state'] = getFile(post.get_full_filename())
 
-    # context['token'] = csrf.generate_csrf()
     print(context)
     return jsonify(**context)
 

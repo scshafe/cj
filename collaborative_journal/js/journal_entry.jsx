@@ -41,11 +41,7 @@ class JournalEntry extends React.Component {
       console.log(data);
       if (this.props.location.state.is_new_entry) {
         console.log(data);
-        this.setState({
-          title: '',
-          entry_id: data.id,
-
-        });
+        this.setState({ title: '', entry_id: data.id });
       }
       else {
         this.setState({
@@ -74,10 +70,6 @@ class JournalEntry extends React.Component {
       alert("cookie is not set");
       return;
     }
-    console.log(event.target);
-    // console.log(event.target.token);
-    // console.log(event.target.elements);
-    // console.log(event.target.attributes.token.value);
     const fetchData = {
       credentials: 'same-origin',
       method: 'POST',

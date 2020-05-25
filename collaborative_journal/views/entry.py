@@ -13,7 +13,7 @@ from tempfile import mkstemp
 import shutil
 from django.views.decorators.csrf import ensure_csrf_cookie
 
-
+from flask_wtf import csrf
 
 def getFile(full_filename):
     return open(full_filename, 'r').read()
@@ -104,23 +104,10 @@ def sha256sum(filename):
 # @ensure_csrf_cookie
 @cj.app.route('/', methods=['GET'])
 def show_timeline():
-    if not current_user.is_authenticated:
-        return redirect(url_for('login'))
 
-    # user = load_user(current_user.get_id())
-    # print('\n\n')
-    # print(user)
-    # print('\n\n')
-    # posts = Post.query.filter_by(user_id=user.id)
-    # print(posts)
-    context = {}
-    # context['entry_ids'] = []
-    # for p in posts:
-    #     context['entry_ids'].append(p.id)
-        # context['entry_ids'].append({'title': p.title, 'post_id': p.id})
-        # context['entries'].append({'title': p.title, 'post_id': p.id, 'journal_entry': p.get_full_filename()})
+    context = {'token': csrf.generate_csrf()}
 
-    # print(context)
+
     return render_template('index_dynamic.html', **context)
     # return flask.jsonify(**context), 200
 

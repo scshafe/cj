@@ -1,8 +1,17 @@
-{% extends "base.html" %}
-{% block content %}
-	<div id="reactEntry">
-	  Loading ...
-	</div>
-	<script type="text/javascript" src="{{ url_for('static', filename='js/bundle.js') }}"></script>
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Collaborative Journal</title>
+        <meta charset="UTF-8">
+    </head>
+    <body>
 
-{% endblock %}
+        <meta id='csrftoken' content={{token}} />
+		<div id="reactEntry">
+		  Loading ...
+		</div>
+		<script type="text/javascript" src="{{ url_for('static', filename='js/bundle.js') }}"></script>
+        
+    </body>
+</html>
+

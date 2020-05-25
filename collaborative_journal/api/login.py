@@ -29,11 +29,11 @@ from collaborative_journal import load_user
 
 
 
-@cj.app.route('/token', methods=['GET'])
-def token():
+# @cj.app.route('/token', methods=['GET'])
+# def token():
 
-    token = csrf.generate_csrf()
-    return jsonify(**{'token': token})
+#     token = csrf.generate_csrf()
+#     return jsonify(**{'token': token})
 
 
 
@@ -42,10 +42,14 @@ def login():
     print(request.data)
     if request.method == 'GET':
         print("\nGET REQUEST\n")
+        # context = {'token': csrf.generate_csrf()}
+        context={}
         if current_user.is_authenticated:
-            return jsonify(**{'is_authenticated': True})
-        return jsonify(**{'is_authenticated': False})
-
+            context['is_authenticated']= True
+        else:
+            context['is_authenticated']= False
+        return render_template('index_dynamic.html', **context)
+        
     if request.method == 'POST':
         data = json.loads(request.data)
         print(request)
@@ -55,33 +59,12 @@ def login():
         return jsonify(**{'is_authenticated': True})
 
 
-        # return redirect(url_for('index'))
-    # if request.method == 'GET':
-    #     print("Get request")
-    #     return render_template('index_dynamic.html')
-        # return jsonify(**{'is_authenticated': False})
-
-    data = json.loads(request.data)
-    # form = LoginForm({username: data['username'], password: data['password']})
-    form = LoginForm()
-    form.username.data = data['username']
-    form.password.data = data['password']
-    form.submit.data = True
-    form.remember_me.data = True
-
-
-    attrs = vars(form)
-    print("attributes: ")
-    print('\n'.join("%s: %s" % item for item in attrs.items()))
-
-    user = User.query.filter_by(username=form.username.data).first()
-    if user is None or not user.check_password(form.password.data):
-        print(form.data)
-        return jsonify(**{'is_authenticated': False})   
-    login_user(user, remember=True)
-    return jsonify(**{'is_authenticated': True})
-    
-
+    # user = User.query.filter_by(username=form.username.data).first()
+    # if user is None or not user.check_password(form.password.data):
+    #     print(form.data)
+    #     return jsonify(**{'is_authenticated': False})   
+    # login_user(user, remember=True)
+    # return jsonify(**{'is_authenticated': True})
     
 
 
@@ -89,4 +72,8 @@ def login():
 def logout():
     logout_user()
     # return redirect(url_for('login'))
-    return jsonify(**{'is_authenticated': False})
+    token = csrf.generate_csrf()
+    return jsonify(**{'is_authenticated': False, 'token': token})
+
+
+

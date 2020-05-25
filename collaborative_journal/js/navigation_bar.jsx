@@ -17,10 +17,6 @@ class NavBar extends React.Component {
 		this.handleNewEntry = this.handleNewEntry.bind(this);
 	}
 
-	// componentDidMount() {
-
-	// }
-
 	handleNewEntry() {
 		fetch('/api/entry/new/', {credentials: 'same-origin'})
 		 .then((response) => {
@@ -42,30 +38,19 @@ class NavBar extends React.Component {
 	render() {
 		return (
 			<AuthConsumer>
-			{({isAuth, logout}) => (
+			{({isAuth, logout, context_csrf_token}) => (
 				isAuth ?
 			<div>
-				<Link to={{
-					pathname: "/journal_entry/:entry_id",
-					state: {
-						is_new_entry: true
-					}
-				}}>
-					<button>
-						New Entry
-					</button>
+				<Link to={{ pathname: "/journal_entry/:entry_id", state: { is_new_entry: true } }}>
+					<button>New Entry</button>
 				</Link>
-
 				
 				<Link to={{ pathname: '/'}} >
-					<button>
-						Timeline
-					</button>
+					<button>Timeline</button>
 				</Link>
+				
 				<Link to={{pathname: '/login'}}>
-					<button onClick={logout}>
-						Log Out.
-					</button>
+					<button onClick={logout} token={context_csrf_token}>Log Out.</button>
 				</Link>
 			</div>
 			: <Link to={{pathname: '/login'}}>
@@ -75,84 +60,9 @@ class NavBar extends React.Component {
 				</Link>)}
 			</AuthConsumer>
 			);
-		
-		// if (this.state.redirect) {
-		// 	return <Redirect to={{
-		// 		pathname: `/journal_entry/${this.state.entry_id}`,
-		// 		state: { entry_id: this.state.entry_id}
-		// 	}}/>;
-		// }
-		// return (
-
-		// 	<div>
-		// 		<Link to={{
-		// 			pathname: "/journal_entry/:entry_id",
-		// 			state: {
-		// 				is_new_entry: true
-		// 			}
-		// 		}}>
-		// 			<button>
-		// 				New Entry
-		// 			</button>
-		// 		</Link>
-
-				
-		// 		<Link to={{ pathname: '/'}} >
-		// 			<button>
-		// 				Timeline
-		// 			</button>
-		// 		</Link>
-		// 		<Link to={{pathname: '/login'}}>
-		// 			<button onClick={logout}>
-		// 				Log Out.
-		// 			</button>
-		// 		</Link>
-		// 	</div>
-		// 	);
 	}
-
 }
 
 export default NavBar;
-
-
-// return (
-// 			<AuthConsumer>
-// 			{({isAuth, logout}) => (
-// 				isAuth ?
-// 			<div>
-// 				<Link to={{
-// 					pathname: "/journal_entry/:entry_id",
-// 					state: {
-// 						is_new_entry: true
-// 					}
-// 				}}>
-// 					<button>
-// 						New Entry
-// 					</button>
-// 				</Link>
-
-				
-// 				<Link to={{ pathname: '/'}} >
-// 					<button>
-// 						Timeline
-// 					</button>
-// 				</Link>
-// 				<Link to={{pathname: '/login'}}>
-// 					<button onClick={logout}>
-// 						Log Out.
-// 					</button>
-// 				</Link>
-// 			</div>
-// 			: <Link to={{pathname: '/login'}}>
-// 				<button>
-// 					Log In.
-// 				</button>
-// 				</Link>)}
-// 			</AuthConsumer>
-// 			);
-
-
-
 
 

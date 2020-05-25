@@ -64,18 +64,13 @@ def sha256sum(filename):
 #     return jsonify(**{})
 
 
-@cj.app.route('/api/entry/<int:entry_id>/edit/', methods=['GET', 'POST', 'DELETE'])
-def edit_entry():
-    if request.method == 'GET':
-        p = Post.query.get(entry_id)
-        context['entry_title': p.title, 'entry_content': getFile(p.get_full_filename())]
-        return jsonify(**context)
-        return render_template('practice.html', **context)
-
-
-
-
-
+# @cj.app.route('/api/entry/<int:entry_id>/edit/', methods=['GET', 'POST', 'DELETE'])
+# def edit_entry():
+#     if request.method == 'GET':
+#         p = Post.query.get(entry_id)
+#         context['entry_title': p.title, 'entry_content': getFile(p.get_full_filename())]
+#         return jsonify(**context)
+#         return render_template('practice.html', **context)
 
 
 
@@ -97,7 +92,7 @@ def get_preview(entry_id):
 
 
 
-# @ensure_csrf_cookie
+
 @cj.app.route('/api/timeline/', methods=['GET'])
 def get_timeline():
     if not current_user.is_authenticated:

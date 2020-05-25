@@ -4,6 +4,6 @@ import CJ_app from './cj_app';
 
 
 ReactDOM.render(
-    <CJ_app />,
+    <CJ_app token={ document.getElementById('csrftoken').content }/>,
    document.getElementById('reactEntry'),
 );
