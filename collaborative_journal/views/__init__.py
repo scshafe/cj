@@ -1,7 +1,4 @@
-
-
-from collaborative_journal.views.login import register
-from collaborative_journal.views.entry import show_timeline
+from collaborative_journal.views.index import show_timeline
 
 
 

@@ -56,6 +56,8 @@ def login():
         print(data)
         user = User.query.filter_by(username=data['username']).first()
         login_user(user, remember=True)
+        print("logging in user: ", user.username)
+        print("with id: ", user.id)
         return jsonify(**{'is_authenticated': True})
 
 
@@ -74,6 +76,42 @@ def logout():
     # return redirect(url_for('login'))
     token = csrf.generate_csrf()
     return jsonify(**{'is_authenticated': False, 'token': token})
+
+
+
+
+@cj.app.route('/register', methods=['POST'])
+def register():
+    if request.method == 'GET':
+        return jsonify(**{})
+
+
+    elif request.method == 'POST':
+        data = json.loads(request.data)
+        user = User(username=data['username'])
+        print(user)
+        user.set_password(data['password'])
+        db.session.add(user)
+        db.session.commit()
+        login_user(user, remember=True)
+
+        return jsonify(**{'successful_register': True})
+
+
+   #  if current_user.is_authenticated:
+   #      return redirect(url_for('index'))
+   #  form = RegisterForm()
+   #  if form.validate_on_submit():
+   #      user = User(username=form.username.data)
+   #      user.set_password(form.password.data)
+   #      db.session.add(user)
+   #      db.session.commit()
+   #      # flash('Congratulations, you are now a registered user!')
+   #      return redirect(url_for('login'))
+   # return render_template('register.html', title='Register', form=form)
+
+
+
 
 
 

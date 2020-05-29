@@ -24,7 +24,7 @@ login_manager.init_app(app)
 from flask_wtf.csrf import CSRFProtect
 csrf = CSRFProtect(app)
 
-from collaborative_journal.model.user import User
+from collaborative_journal.model.user import User, Friendship
 from collaborative_journal.model.post import Post
 
 @login_manager.user_loader

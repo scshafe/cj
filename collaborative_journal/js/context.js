@@ -15,6 +15,7 @@ class AuthProvider extends React.Component {
   	super(props);
   	this.login = this.login.bind(this);
   	this.logout = this.logout.bind(this);
+    this.register = this.register.bind(this);
     // this.save_post = this.save_post.bind(this);
     this.state = {isAuth: false,
                   cookie: props.token,
@@ -54,7 +55,7 @@ class AuthProvider extends React.Component {
       if (data.is_authenticated) {
         console.log(data);
         this.setState({isAuth: true});
-        this.getToken();
+        // this.getToken();
       }
       else {
         alert("Failed to sign in.");
@@ -89,7 +90,32 @@ class AuthProvider extends React.Component {
   }
 
 
-  register() { }
+  register(event) { 
+    event.preventDefault();
+
+    const {username, password} = event.target.elements;
+
+    const fetchData = {
+      credentials: 'same-origin',
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'X-CSRFToken':  this.state.cookie },
+        body: JSON.stringify({username: username.value,
+                              password: password.value})};
+
+    fetch('/register', fetchData)
+    .then((response) =>  {
+      if (!response.ok) throw Error(response.statusText);
+      return response.json();
+    })
+    .then((data) => {
+      if (data.successful_register) {
+        this.setState({isAuth: true});
+      }
+    })
+  }
   
   render() {
 	  return (
@@ -97,6 +123,7 @@ class AuthProvider extends React.Component {
 	          isAuth: this.state.isAuth,
 	          login: this.login,
 	          logout: this.logout,
+            register: this.register,
             context_csrf_token: this.state.cookie,
             cookie_ready: this.state.cookie_ready}}>
 	        {this.props.children}

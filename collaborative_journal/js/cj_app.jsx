@@ -8,6 +8,8 @@ import Preview from './preview';
 import JournalEntry from './journal_entry';
 import {AuthProvider} from './context';
 import ProtectedRoute from './protected_route';
+import Account from './account';
+import Register from './register';
 
 
 
@@ -23,13 +25,15 @@ function CJ_app(props) {
       <AuthProvider token={props.token}>
       <div>
         <div>
-          <NavBar />
+        <NavBar />
         </div>
         <div>
           <Switch>
               <ProtectedRoute component={Timeline} exact path="/" />
+              <ProtectedRoute component={Account} path="/account" />
               <ProtectedRoute component={JournalEntry} path="/journal_entry/:entry_id"  />
               <Route path="/login" component={LoginScreen} />
+              <Route path="/register" component={Register} />
           </Switch>
         </div>
 
