@@ -26,8 +26,6 @@ debug_space='\n\n\n'
 
 
 
-
-
 def getFile(full_filename):
     return open(full_filename, 'r').read()
 

@@ -6,7 +6,7 @@ import json
 from flask_login import current_user
 from collaborative_journal import load_user
 # from collaborative_journal.model.post import Post
-from collaborative_journal.model.user import Friendship, User
+from collaborative_journal.model.user import User
 from collaborative_journal.model import db
 # from collaborative_journal.views.login import logout
 

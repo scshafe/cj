@@ -47,10 +47,6 @@ function Account(props) {
 			// 	data.friends[i]
 			// }
 			set_friends(data.friends);
-			// set_friends(oldFriends => [...oldFriends, data.friends]);
-			// set_friends([...oldFriends,])
-			console.log("friends after initial load");
-			console.log(friends);
 		})
 		.catch(error => console.log(error));
 	}, []);

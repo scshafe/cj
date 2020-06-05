@@ -5,6 +5,7 @@ from collaborative_journal.queryStatements import getQuery
 import sys
 from flask_login import current_user
 from collaborative_journal import load_user
+from collaborative_journal.model.user import User
 from collaborative_journal.model.post import Post
 from collaborative_journal.model import db
 import os
@@ -99,10 +100,12 @@ def get_timeline():
         return redirect(url_for('login'))
 
     user = load_user(current_user.get_id())
+    posts_access = user.access_posts
+    posts = user.own_posts
     print('\n\n')
     print(user)
     print('\n\n')
-    posts = Post.query.filter_by(user_id=user.id)
+    # posts = Post.query.filter_by(user_id=user.id)
     print(posts)
     context = {}
     context['entry_ids'] = []

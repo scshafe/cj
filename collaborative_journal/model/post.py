@@ -1,6 +1,8 @@
 
 import hashlib
 from collaborative_journal.model import db
+# from collaborative_journal.model.user import Friendship, User
+
 from collaborative_journal.config import UPLOAD_FOLDER
 from werkzeug import secure_filename
 import os
@@ -16,15 +18,31 @@ def sha256sum(filename):
     return sha256_obj.hexdigest()
 
 
+class Access(db.Model):
+    __table_args__ = {'extend_existing': True}
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id'), primary_key=True)
+
+
+
 class Post(db.Model):
-    __table__name = 'posts'
+    # __table__name = 'posts'
     id = db.Column(db.Integer, primary_key=True)
 
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    # owner = db.relationship('User', back_populates="own_posts")
+
     entry_filename = db.Column(db.String(100))
 
     title = db.Column(db.String(100))
     # filename = db.Column(db.String())
+
+    # accessors = db.relationship('User',
+    #                             secondary=Access.__tablename__,
+    #                             primarjoin=)
+    # users_with_access = db.relationship('User',
+    #                                     secondary=Access.__table__name,
+    #                                     back_populates)
 
 
     def __repr__(self):
@@ -64,6 +82,8 @@ class Post(db.Model):
         if self.entry_filename:
             tmp_full_filename = self.get_full_filename()
             os.remove(tmp_full_filename)
+
+
         
             
 

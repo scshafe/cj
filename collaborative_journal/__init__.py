@@ -21,11 +21,15 @@ db.init_app(app)
 migrate = Migrate(app, db)
 login_manager.init_app(app)
 
+# print(db.metadata)
+
 from flask_wtf.csrf import CSRFProtect
 csrf = CSRFProtect(app)
 
-from collaborative_journal.model.user import User, Friendship
+from collaborative_journal.model.user import User
 from collaborative_journal.model.post import Post
+
+print(db.metadata)
 
 @login_manager.user_loader
 def load_user(user_id):

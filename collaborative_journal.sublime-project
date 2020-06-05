@@ -1,0 +1,59 @@
+{
+	"folders":
+	[
+		{
+			"path": "collaborative_journal",
+			"folder_exclude_patterns":
+			[
+				"static",
+				"__pycache__",
+
+			],
+			"name": "src"
+		},
+		{
+			"folder_exclude_patterns":
+			[
+				"env",
+				// "migrations",
+				"node_modules",
+				// "sql",
+				"tests",
+				"var",
+				"collaborative_journal.egg-info",
+				"collaborative_journal"
+			],
+			"path": ".",
+			"name": "manage"
+
+		}
+
+	]
+}
+// {
+// 	"folders":
+// 	[
+// 		{
+// 			"name" : "collaborative_journal",
+// 			"path": ".",
+// 			"folders":
+// 			[
+// 				{
+// 					"name": "src",
+// 					"path": "collaborative_journal",
+// 					"folder_exclude_patterns":
+// 					[
+// 						"static",
+// 						"__pycache__",
+
+// 					]
+// 				},
+// 				{
+// 					"name": "manage",
+// 					"path": "."
+// 				}
+// 			]
+// 		}
+// 	]
+// }
+

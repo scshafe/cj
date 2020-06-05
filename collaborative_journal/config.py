@@ -37,4 +37,4 @@ SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'app.db')
 #     os.path.dirname(os.path.dirname(os.path.realpath(__file__))),
 #     'var', 'collaborative_journal.sqlite3')
 
-SQLALCHEMY_TRACK_MODIFICATIONS = False
+SQLALCHEMY_TRACK_MODIFICATIONS = True
