@@ -5,7 +5,8 @@ from collaborative_journal.queryStatements import getQuery
 import sys
 from flask_login import current_user
 from collaborative_journal import load_user
-from collaborative_journal.model.post import Post
+from collaborative_journal.model.post import Access, Post
+from collaborative_journal.model.user import User
 from collaborative_journal.model import db
 # from collaborative_journal.views.login import logout
 import os
@@ -65,7 +66,6 @@ def save_journal_entry(entry_id):
     print(save_data, end=debug_space)
 
 
-    # sesh.execute(Post.update().where(Post.c.id==entry_id).values(title=save_data['entry_title']))
     p = Post.query.get(entry_id)
     p.title = save_data['title']
     p.save_post(save_data['editor_state'])
@@ -111,6 +111,87 @@ def delete_journal_entry(entry_id):
 
     context = {"successful_delete": True}
     return jsonify(**context)
+
+
+@cj.app.route('/api/entry/share_entry/', methods=['POST'])
+def share_journal_entry():
+
+    share_data = json.loads(request.data.decode('utf8'))
+
+    user = load_user(current_user.get_id())
+    friend = User.query.filter_by(username=share_data['sharingName']).first()
+    post = Post.query.get(share_data['post_id'])
+
+    if friend in user.friends:
+        print("is friend")
+        friend.access_posts.append(post)
+        db.session.add(friend)
+        db.session.commit()
+        context = {"successful_add": True}
+        return jsonify(**context)
+    else:
+        return jsonify(**{}), 404
+
+
+
+
+
+@cj.app.route('/api/entry/<int:entry_id>/get_access_list/', methods=['GET'])
+def get_entry_access_list(entry_id):
+
+    # user = load_user(current_user.get)
+    post = Post.query.filter_by(id=entry_id).first()
+
+    accessing_info = Access.query.all()
+    print(accessing_info)
+    print([x.username for x in post.accessors])
+
+    # dictionary with key=username, val=id
+    return jsonify(**{'access_list': [x.username for x in post.accessors]})
+
+
+@cj.app.route('/api/entry/delete_share/', methods=['DELETE'])
+def delete_entry_access_share():
+
+    share_data = json.loads(request.data.decode('utf8'))
+    print(share_data)
+
+    user = load_user(current_user.get_id())
+    post = Post.query.get(share_data['post_id'])
+
+    if post.user_id == user.id:
+        print("check 1")
+        friend = User.query.filter_by(username=share_data['sharingName']).first()
+        # friend = User.query.filter_by(username=share_data['sharingName']).first()
+        # print(friend)
+        # print(user.friends)
+
+        if friend in user.friends:
+            print("check 2")
+            if friend in post.accessors:
+                print("check 3")
+                post.accessors.remove(friend)
+                db.session.add(post)
+                db.session.commit()
+                return jsonify(**{"successful_share_delete": True})
+
+
+    return jsonify(**{"successful_share_delete": False})
+
+
+
+    
+
+
+    
+
+
+
+
+
+
+
+
 
 
 

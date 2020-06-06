@@ -23,6 +23,9 @@ class Access(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'), primary_key=True)
 
+    def __repr__(self):
+        return '<Access>\n\tuser_id:{}\n\tpost_id:{}'.format(self.user_id, self.post_id)
+
 
 
 class Post(db.Model):

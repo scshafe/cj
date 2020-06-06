@@ -7,15 +7,11 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 
 
-class Followers(db.Model):
-    # __tablename__='friendship'
-    follower = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
-    followed = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
 
-# friendship = db.Table('friendship',
-#     db.Column('friend_a_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
-#     db.Column('friend_b_id', db.Integer, db.ForeignKey('user.id'), primary_key=True)
-#     )
+class Friendship(db.Model):
+
+    friend_a_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
+    friend_b_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
 
 
 
@@ -32,15 +28,11 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(255), nullable=False)
     posts = db.relationship('Post', backref='author', lazy='dynamic')
 
-    followers = db.relationship('User',
-                                secondary=Followers.__tablename__,
-                                primaryjoin=(Followers.followed==id),
-                                secondaryjoin=(Followers.follower==id))
+    friends = db.relationship('User',
+                              secondary=Friendship.__tablename__,
+                              primaryjoin=(Friendship.friend_a_id==id),
+                              secondaryjoin=(Friendship.friend_b_id==id))
 
-    following = db.relationship('User',
-                                secondary=Followers.__tablename__,
-                                primaryjoin=(Followers.follower==id),
-                                secondaryjoin=(Followers.followed==id))
 
 
     access_posts = db.relationship('Post',
@@ -53,15 +45,11 @@ class User(UserMixin, db.Model):
                                 primaryjoin=(Post.user_id==id),
                                 backref='owner')
 
-    # view_posts = db.relationship('Post',
-    #                              secondary=Access.__tablename__,
-    #                              primaryjoin=(Access.user_id==id),
-    #                              secondaryjoin=(Access.))
 
-    # view_posts = own_posts
-
-
-    # access = db.relationship('Access', secondary=A)
+    def timeline_posts(self, index=0, count=20):
+        print("access posts: ", self.access_posts)
+        print("own posts: ", self.own_posts)
+        return sorted([x.id for x in self.access_posts] + [x.id for x in self.own_posts])
 
 
 

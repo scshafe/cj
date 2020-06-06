@@ -25,60 +25,6 @@ def sha256sum(filename):
     return sha256_obj.hexdigest()
 
 
-# @cj.app.route('/api/entry/new/', methods=['GET', 'POST'])
-# def new_entry():
-#     if request.method == 'GET':
-#         context = {}
-#         context['entry_title'] = 'testcomponentdidmount'
-#         context['url'] = '/api/entry/'
-#         print("checkpoint")
-#         return jsonify(**context), 201
-
-#     et = json.loads(request.data.decode('utf8'))
-#     print(et)
-#     p = Post(title=et['entry_title'], user_id=current_user.get_id())
-
-#     dummy, temp_filename = mkstemp()
-#     tempfile = open(temp_filename, 'w')
-#     tempfile.write(json.dumps(et['entry']))
-#     tempfile.flush()
-#     p.create_filename(sha256sum(temp_filename))   
-#     shutil.move(temp_filename, p.get_full_filename())
-
-#     db.session.add(p)
-#     db.session.commit()
-#     context = {}
-#     context['successful_save'] = True
-#     return jsonify(**context)
-
-    # return redirect(url_for('show_timeline'))
-    # return flask.jsonify(**context), 200
-
-# @cj.app.route('/api/entry/<int:entry_id>/', methods=['GET', 'POST', 'DELETE'])
-# def entry():
-#     if request.method == 'GET':
-#         p = Post.query.get(entry_id)
-
-#         context['entry_title': p.title, 'entry_content': getFile(p.get_full_filename())]
-#         return jsonify(**context)
-#     print("post method not yet implemented")
-#     return jsonify(**{})
-
-
-# @cj.app.route('/api/entry/<int:entry_id>/edit/', methods=['GET', 'POST', 'DELETE'])
-# def edit_entry():
-#     if request.method == 'GET':
-#         p = Post.query.get(entry_id)
-#         context['entry_title': p.title, 'entry_content': getFile(p.get_full_filename())]
-#         return jsonify(**context)
-#         return render_template('practice.html', **context)
-
-
-
-
-
-
-
 @cj.app.route('/api/preview/<int:entry_id>/', methods=['GET'])
 def get_preview(entry_id):
 
@@ -102,17 +48,10 @@ def get_timeline():
     user = load_user(current_user.get_id())
     posts_access = user.access_posts
     posts = user.own_posts
-    print('\n\n')
-    print(user)
-    print('\n\n')
-    # posts = Post.query.filter_by(user_id=user.id)
-    print(posts)
-    context = {}
-    context['entry_ids'] = []
-    for p in posts:
-        context['entry_ids'].append(p.id)
-    print(context)
-    return jsonify(**context)
+    print(user.timeline_posts())
+
+    return jsonify(**{'entry_ids': user.timeline_posts()})
+    
 
 
 
