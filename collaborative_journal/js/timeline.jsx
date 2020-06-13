@@ -21,8 +21,6 @@ function Timeline (props) {
 		  .catch(error => console.log(error));
 	}, []);
 
-	console.log(entry_ids);
-
 	function handleDelete(event) {
 		console.log(event.target);
 		const je = event.target.attributes.je.value;

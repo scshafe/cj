@@ -38,8 +38,10 @@ def sha256sum(filename):
     return sha256_obj.hexdigest()
 
 
+
 @cj.app.route('/api/entry/new/', methods=['GET'])
 def new_entry():
+    print('ERROR HERE, new entry request should be POST, not GET')
     
     p = Post(user_id=current_user.get_id())
     db.session.add(p)
@@ -56,6 +58,13 @@ def new_entry():
 
 
     return jsonify(**context)
+
+
+# @cj.app.route('/api/entry/save/', methods=['GET'])
+# def save_journal_entry():
+    
+#     save_data = json.loads(request.data.decode('utf8'))
+    
 
 
 @cj.app.route('/api/entry/<int:entry_id>/', methods=['POST'])
@@ -134,8 +143,6 @@ def share_journal_entry():
 
 
 
-
-
 @cj.app.route('/api/entry/<int:entry_id>/get_access_list/', methods=['GET'])
 def get_entry_access_list(entry_id):
 
@@ -146,7 +153,6 @@ def get_entry_access_list(entry_id):
     print(accessing_info)
     print([x.username for x in post.accessors])
 
-    # dictionary with key=username, val=id
     return jsonify(**{'access_list': [x.username for x in post.accessors]})
 
 
@@ -160,16 +166,10 @@ def delete_entry_access_share():
     post = Post.query.get(share_data['post_id'])
 
     if post.user_id == user.id:
-        print("check 1")
         friend = User.query.filter_by(username=share_data['sharingName']).first()
-        # friend = User.query.filter_by(username=share_data['sharingName']).first()
-        # print(friend)
-        # print(user.friends)
 
         if friend in user.friends:
-            print("check 2")
             if friend in post.accessors:
-                print("check 3")
                 post.accessors.remove(friend)
                 db.session.add(post)
                 db.session.commit()
@@ -178,12 +178,6 @@ def delete_entry_access_share():
 
     return jsonify(**{"successful_share_delete": False})
 
-
-
-    
-
-
-    
 
 
 

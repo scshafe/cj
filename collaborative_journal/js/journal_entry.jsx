@@ -1,9 +1,10 @@
 import React, {useState, useEffect} from 'react';
 import ReactDOM from 'react-dom';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import {Editor, EditorState, convertFromRaw, convertToRaw} from 'draft-js';
 import {AuthConsumer} from './context';
 import ShareEntry from './share_entry';
+import Comments from './comments';
 
 function JournalEntry(props) {
 
@@ -15,6 +16,32 @@ function JournalEntry(props) {
     const [title, set_title] = useState('');
     const [editor_state, set_editor_state] =  useState(EditorState.createEmpty());
 
+
+
+    // useEffect(() => {
+    //   if (!new_entry) {
+    //     fetch(`/api/entry/${entry_id}`, {'credentials': 'same-origin'})
+    //     .then((response) => {
+    //         return response.json();
+    //       })
+    //     .then((data) => {
+    //       console.log(data);
+
+    //       // if (new_entry) {
+    //         // set_entry_id(data.id);
+    //       // }
+    //       // else {
+    //         set_title(data.title);
+    //         set_editor_state(EditorState.createWithContent(convertFromRaw(JSON.parse(data.editor_state)))); 
+    //       // }
+    //     })
+    //     .catch(error => console.log(error));
+
+    //   }
+    //   const api_url = '/api/entry/save/';
+    //   // const api_url = new_entry ? '/api/entry/new/' : `/api/entry/${entry_id}`;
+        
+    // }, []);
 
 
     useEffect(() => {
@@ -93,6 +120,9 @@ function JournalEntry(props) {
           <button id="saveButton" onClick={saveEntry} token={context_csrf_token} >
             Save
           </button>
+        </div>
+        <div>
+          <Comments entry_id={entry_id} />
         </div>
       </div>
     )}
