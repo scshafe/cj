@@ -9,12 +9,13 @@ import Comments from './comments';
 function JournalEntry(props) {
 
     console.log(props);
-    const new_entry = props.location.state.is_new_entry;
-    console.log(new_entry);
+    // const new_entry = props.location.state.is_new_entry;
+    // console.log(new_entry);
 
+    const [new_entry, set_new_entry] = useState(props.location.state.is_new_entry);
     const [entry_id, set_entry_id] = (new_entry) ? useState(0) : useState(props.location.state.entry_id);
     const [title, set_title] = useState('');
-    const [editor_state, set_editor_state] =  useState(EditorState.createEmpty());
+    const [editor_state, set_editor_state] = useState(EditorState.createEmpty());
 
 
 
@@ -45,6 +46,7 @@ function JournalEntry(props) {
 
 
     useEffect(() => {
+      if (!new_entry) {
       const api_url = new_entry ? '/api/entry/new/' : `/api/entry/${entry_id}`;
       fetch(api_url, {'credentials': 'same-origin'})
       .then((response) => {
@@ -62,7 +64,9 @@ function JournalEntry(props) {
         }
       })
       .catch(error => console.log(error));
+    }
     }, []);
+  
 
   
 
@@ -87,11 +91,13 @@ function JournalEntry(props) {
         'Content-Type': 'application/json',
         "X-CSRFToken": event.target.attributes.token.value
       },
-      body: JSON.stringify({ title: title,
+      body: JSON.stringify({ new_entry: new_entry,
+                             entry_id: entry_id,
+                             title: title,
                              editor_state: convertToRaw(editor_state.getCurrentContent()),
                              })
     };
-    fetch(`/api/entry/${entry_id}/`, fetchData)
+    fetch(`/api/entry/save/`, fetchData)
     .then((response) => {
         if (!response.ok) throw Error(response.statusText);
         return response.json();
@@ -99,6 +105,11 @@ function JournalEntry(props) {
     .then((data) => {
       if (data.successful_save) {
         alert("saved");
+        set_entry_id(data.entry_id);
+        set_new_entry(false);
+      }
+      else {
+        alert("failed save");
       }
     })
     .catch(error => console.log(error));
@@ -111,7 +122,9 @@ function JournalEntry(props) {
       <div>
         <div class="title">
           title: <textarea value={title} onChange={onTitleChange} />
+          {!new_entry &&
           <ShareEntry post_id={entry_id} />
+          }
         </div>
         <div>
           <Editor editorState={editor_state} onChange={onEntryChange} />
@@ -122,7 +135,9 @@ function JournalEntry(props) {
           </button>
         </div>
         <div>
+          {!new_entry &&
           <Comments entry_id={entry_id} />
+          }
         </div>
       </div>
     )}

@@ -43,8 +43,19 @@ def get_post_comments(entry_id):
 @cj.app.route('/api/comment/<int:comment_id>/', methods=['GET'])
 def get_comment(comment_id):
 
+    context = {}
+
     comment = Comment.query.get(comment_id)
-    return jsonify(**{'editor_state': getFile(comment.get_full_filename())})
+    if comment.has_file():
+        commenter = User.query.get(comment.user_id)
+        context['editor_state'] = getFile(comment.get_full_filename())
+        context['user_id'] = commenter.username
+        # if commenter.id == load_user(current_user.get_id()).id:
+        context['owner'] = True if commenter.id == load_user(current_user.get_id()).id else False
+        print(context)
+        # return jsonify(**{'editor_state': getFile(comment.get_full_filename()),
+        #                   'user_id': commenter.username})
+    return jsonify(**context)
 
     # getFile(post.get_full_filename())
 
@@ -64,6 +75,9 @@ def save_comment():
     save_data = json.loads(request.data.decode('utf8'))
 
     comment = Comment(post_id=save_data['entry_id'], user_id=current_user.get_id()) if save_data['new_comment'] else Comment.query.get(save_data['comment_id'])
+    if comment.user_id != current_user.get_id():
+        return jsonify(**{'successful_save': False})
+
     comment.shared = save_data['shared']
 
     comment.save_post(save_data['editor_state'])
@@ -85,6 +99,8 @@ def delete_comment():
     save_data = json.loads(request.data.decode('utf8'))
 
     comment = Comment.query.get(save_data['comment_id'])
+    if comment.user_id != load_user(current_user.get_id()).id:
+        return jsonify(**{'successful_delete': False})
     comment.delete_file()
     db.session.delete(comment)
     db.session.flush()

@@ -46,6 +46,9 @@ function Comments(props) {
 		  			return c_id !== Number(comment_id);
 		  		}))
 		  	}
+		  	else {
+		  		alert("failed delete");
+		  	}
 		  	console.log("comments after deleting", comments);
 		  })
 		  .catch(error => console.log(error));

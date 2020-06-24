@@ -9,6 +9,8 @@ function Comment(props) {
 	const comment_id = props.comment_id;
 	const [editor_state, set_editor_state] = useState(EditorState.createEmpty());
 	const [is_public, set_is_public] = useState(false);
+	const [commenter_username, set_commenter_username] = useState('');
+	const [owner, set_owner] = useState(false);
 
 	function handlePublicChange(event) {
 		set_is_public(event.target);
@@ -28,7 +30,8 @@ function Comment(props) {
 		})
 		.then((data) => {
 			set_editor_state(EditorState.createWithContent(convertFromRaw(JSON.parse(data.editor_state))));
-			
+			set_commenter_username(data.user_id);
+			set_owner(data.owner);
 		})
 		.catch(error => console.log(error));
 	}, []);
@@ -44,9 +47,12 @@ function Comment(props) {
 		<AuthConsumer>
 		{({context_csrf_token}) => (
 			<div>
+				{commenter_username}
+				{owner &&
 				<form>
 					<input type="checkbox" id="comment_public_option" name="public" value={is_public} />
 				</form>
+				}
 				<Editor editorState={editor_state} onChange={onEntryChange} />
 			</div>
 		)}

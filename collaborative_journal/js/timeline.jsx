@@ -39,6 +39,9 @@ function Timeline (props) {
 		  			return entry_id !== Number(je);
 		  		}))
 		  	}
+		  	else {
+		  		alert("failed delete");
+		  	}
 		  })
 		  .catch(error => console.log(error));
 	}

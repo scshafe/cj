@@ -1,4 +1,4 @@
 
 
-from collaborative_journal.api.journal_entry.journal_entry import new_entry, save_journal_entry, get_journal_entry, delete_journal_entry
+from collaborative_journal.api.journal_entry.journal_entry import save_journal_entry, get_journal_entry, delete_journal_entry, share_journal_entry, get_entry_access_list, delete_entry_access_share
 from collaborative_journal.api.journal_entry.comment import get_post_comments, save_comment, delete_comment

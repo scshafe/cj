@@ -39,48 +39,28 @@ def sha256sum(filename):
 
 
 
-@cj.app.route('/api/entry/new/', methods=['GET'])
-def new_entry():
-    print('ERROR HERE, new entry request should be POST, not GET')
-    
-    p = Post(user_id=current_user.get_id())
-    db.session.add(p)
-    db.session.flush()
-    db.session.commit()
-
-    print(p)
-    print(p.id)
-    
-    context = {}
-    context['successful_save'] = True
-    context['id'] = p.id
-    context['title'] = ''
-
-
-    return jsonify(**context)
-
-
-# @cj.app.route('/api/entry/save/', methods=['GET'])
-# def save_journal_entry():
-    
-#     save_data = json.loads(request.data.decode('utf8'))
-    
-
-
-@cj.app.route('/api/entry/<int:entry_id>/', methods=['POST'])
-def save_journal_entry(entry_id):
+@cj.app.route('/api/entry/save/', methods=['POST'])
+def save_journal_entry():
 
     save_data = json.loads(request.data.decode('utf8'))
     print('\n')
     print(save_data, end=debug_space)
 
+    user = load_user(current_user.get_id())
+    p = Post(user_id=user.id) if save_data['new_entry'] else Post.query.get(save_data['entry_id'])
+    
+    if p.user_id != user.id: # make sure only post owner is editting it
+        return jsonify(**{'successful_save': False})
 
-    p = Post.query.get(entry_id)
     p.title = save_data['title']
     p.save_post(save_data['editor_state'])
+    db.session.add(p)
     db.session.commit()
+
     context = {}
     context['successful_save'] = True
+    context['entry_id'] = p.id
+    print(context)
     return jsonify(**context)
 
 
@@ -113,6 +93,13 @@ def delete_journal_entry(entry_id):
     print("deleting journal entry {}\n".format(entry_id))
 
     post = Post.query.get(entry_id)
+
+    user = load_user(current_user.get_id())
+    if post.user_id != user.id: # make sure only post owner is editting it
+        print("post id", post.id)
+        print("post user id", post.user_id, type(post.user_id))
+        print("current user id", current_user.get_id(), type(current_user.get_id()))
+        return jsonify(**{'successful_delete': False})
     post.delete_file()        
     db.session.delete(post)
     db.session.flush()
