@@ -6,6 +6,8 @@ import JournalEntry from './journal_entry';
 // import App from './app';
 
 
+import styles from '../css/preview.css';
+
 function Preview(props) {
 	const [title, set_title] = useState('');
 		console.log(props);
@@ -30,23 +32,18 @@ function Preview(props) {
 	return (
 		<div>
 			<div>
-				<div>
-					{props.entry_id}
-				</div>
-				<div>
-					{title}
-				</div>
-				<div>
-					<Link to={{
-						pathname: `/journal_entry/${props.entry_id}`,
-						state: {
-							is_new_entry: false,
-							entry_id: props.entry_id,
-							title: title
-						}
-					}}>View
-					</Link>
-				</div>
+				{title}
+			</div>
+			<div>
+				<Link to={{
+					pathname: `/journal_entry/${props.entry_id}`,
+					state: {
+						is_new_entry: false,
+						entry_id: props.entry_id,
+						title: title
+					}
+				}}>View
+				</Link>
 			</div>
 		</div>);
 

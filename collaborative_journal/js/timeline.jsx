@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import Preview from './preview'
 import {AuthConsumer} from './context';
 
+import styles from '../css/timeline.css';
+
 
 function Timeline (props) {
 
@@ -50,12 +52,12 @@ function Timeline (props) {
 		<AuthConsumer>
 		{({context_csrf_token}) => (
 			<div>
-				<div className="timeline_container">
+				<div className={styles.timeline}>
 					{entry_ids.map(je => (
-						<div key={je} >
+						<div key={je} className={styles.preview}>
 							<Preview api={`api/preview/${je}/`} entry_id={je} />
 
-							<button onClick={handleDelete} je={je} token={context_csrf_token} >
+							<button onClick={handleDelete} je={je} token={context_csrf_token} className={styles.deleteButton} >
 								delete
 							</button>
 						</div>

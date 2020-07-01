@@ -1,0 +1,33 @@
+
+
+.navigationBar {
+	display: flex;
+	flex-wrap: nowrap;
+	flex-direction: row;
+	background-color: aliceblue; 
+	font-size: 16px Arial;
+  	justify-content: space-between;
+}
+
+
+.navigationBar button {
+	font-size: 20px;
+	padding: 4px 4px;
+	text-align: center;
+	color: white;
+	background-color: cornflowerblue;
+
+}
+
+.alignLeft {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+}
+
+.alignRight {
+	align-self: flex-end;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+}

@@ -1,0 +1,20 @@
+
+
+
+.timeline {
+	display: flex;
+	flex-direction: column;
+	
+}
+
+
+
+
+.timeline .preview {
+	background-color: lightblue;
+	margin: 6px 4px;
+}
+
+.preview .deleteButton {
+	float: right;
+}

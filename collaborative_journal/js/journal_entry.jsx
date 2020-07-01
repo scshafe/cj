@@ -6,43 +6,16 @@ import {AuthConsumer} from './context';
 import ShareEntry from './share_entry';
 import Comments from './comments';
 
+import styles from '../css/journal_entry.css';
+
 function JournalEntry(props) {
 
     console.log(props);
-    // const new_entry = props.location.state.is_new_entry;
-    // console.log(new_entry);
 
     const [new_entry, set_new_entry] = useState(props.location.state.is_new_entry);
     const [entry_id, set_entry_id] = (new_entry) ? useState(0) : useState(props.location.state.entry_id);
     const [title, set_title] = useState('');
     const [editor_state, set_editor_state] = useState(EditorState.createEmpty());
-
-
-
-    // useEffect(() => {
-    //   if (!new_entry) {
-    //     fetch(`/api/entry/${entry_id}`, {'credentials': 'same-origin'})
-    //     .then((response) => {
-    //         return response.json();
-    //       })
-    //     .then((data) => {
-    //       console.log(data);
-
-    //       // if (new_entry) {
-    //         // set_entry_id(data.id);
-    //       // }
-    //       // else {
-    //         set_title(data.title);
-    //         set_editor_state(EditorState.createWithContent(convertFromRaw(JSON.parse(data.editor_state)))); 
-    //       // }
-    //     })
-    //     .catch(error => console.log(error));
-
-    //   }
-    //   const api_url = '/api/entry/save/';
-    //   // const api_url = new_entry ? '/api/entry/new/' : `/api/entry/${entry_id}`;
-        
-    // }, []);
 
 
     useEffect(() => {
@@ -119,21 +92,31 @@ function JournalEntry(props) {
   return (
     <AuthConsumer>
     {({context_csrf_token}) => (
-      <div>
-        <div class="title">
+      <div className={styles.journalEntry} >
+        <div className={styles.journalHeader} >
+
+          <div className={styles.title}>
           title: <textarea value={title} onChange={onTitleChange} />
-          {!new_entry &&
-          <ShareEntry post_id={entry_id} />
-          }
+          </div>
+
+          <div className={styles.buttonAlignment} >
+            <div className={styles.shareButton} >
+            {!new_entry && <ShareEntry post_id={entry_id} />}
+            </div>
+
+            <div className={styles.saveButton} >
+              <button id="saveButton" onClick={saveEntry} token={context_csrf_token} >
+                Save
+              </button>
+            </div>
+          </div>
+
         </div>
-        <div>
+
+        <div className={styles.journalEditor} >
           <Editor editorState={editor_state} onChange={onEntryChange} />
         </div>
-        <div>
-          <button id="saveButton" onClick={saveEntry} token={context_csrf_token} >
-            Save
-          </button>
-        </div>
+        
         <div>
           {!new_entry &&
           <Comments entry_id={entry_id} />

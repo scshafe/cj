@@ -110,7 +110,7 @@ function ShareEntry(props) {
 	    <AuthConsumer>
 	    {({context_csrf_token}) => (
 	      <div>
-	        <button onClick={openModal}>Open Modal</button>
+	        <button onClick={openModal}>Share Entry</button>
 	        <Modal isOpen={modalIsOpen} onRequestClose={closeModal}>
 
 	          {access_list.length > 0 ? access_list.map( name => (

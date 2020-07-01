@@ -6,7 +6,7 @@ import JournalEntry from './journal_entry';
 import {AuthConsumer} from './context';
 
 
-
+import styles from '../css/navigation_bar.css';
 
 function NavBar (props) {
 	
@@ -14,22 +14,34 @@ function NavBar (props) {
 		<AuthConsumer>
 		{({isAuth, logout, context_csrf_token}) => (
 			isAuth ?
-		<div>
+		<div className={styles.navigationBar}>
+			<div className={styles.alignLeft}>
+			<div>
 			<Link to={{ pathname: "/journal_entry/:entry_id", state: { is_new_entry: true } }}>
-				<button>New Entry</button>
+				<button >New Entry</button>
 			</Link>
+			</div>
 			
+			<div>
 			<Link to={{ pathname: '/'}} >
-				<button>Timeline</button>
+				<button >Timeline</button>
 			</Link>
+			</div>
+			</div>
 
-			<Link to={{pathname: '/account'}}>
+			<div className={styles.alignRight}>
+			<div>
+			<Link to={{pathname: '/account'}} >
 				<button>Account</button>
 			</Link>
+			</div>
 			
-			<Link to={{pathname: '/login'}}>
+			<div>
+			<Link to={{pathname: '/login'}} >
 				<button onClick={logout} token={context_csrf_token}>Log Out.</button>
 			</Link>
+			</div>
+			</div>
 		</div>
 		: <Link to={{pathname: '/login'}}>
 			<button>
@@ -42,5 +54,7 @@ function NavBar (props) {
 }
 
 export default NavBar;
+
+//className={styles.standardButton}
 
 

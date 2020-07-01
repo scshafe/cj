@@ -13,7 +13,7 @@ import Register from './register';
 
 
 
-
+import styles from '../css/cj_app.css';
 
 
  
